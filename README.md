@@ -35,3 +35,7 @@ Dependency
 This extension is dependent on the following extensions:
 
 - [[contao-monitoring/monitoring]](https://packagist.org/packages/contao-monitoring/monitoring)
+
+This extension is dependent on the following system requirements:
+
+- cURL: for reading data via the API from the MonitoringClient
