@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_scan_active'] = array
   'filter'                  => true,
   'inputType'               => 'checkbox',
   'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true, 'doNotCopy'=>true),
-  'sql'                     => "text NOT NULL"
+  'sql'                     => "char(1) NOT NULL default ''"
 );
 $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_url'] = array
 (
@@ -52,8 +52,8 @@ $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_url'] = array
   'exclude'                 => true,
   'inputType'               => 'text',
   'save_callback'           => array(array('tl_monitoring', 'prepareUrl')),
-  'eval'                    => array('tl_class'=>'clr long', 'mandatory'=>true, 'rgxp'=>'url', 'doNotCopy'=>true),
-  'sql'                     => "text NOT NULL"
+  'eval'                    => array('tl_class'=>'clr long', 'mandatory'=>true, 'rgxp'=>'url', 'doNotCopy'=>true, 'maxlength'=>512, 'decodeEntities'=>true),
+  'sql'                     => "varchar(512) NOT NULL default ''"
 );
 $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_token'] = array
 (
