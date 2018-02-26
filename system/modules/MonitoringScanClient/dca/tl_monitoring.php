@@ -2,7 +2,7 @@
 
 /**
  * Contao Open Source CMS
- * Copyright (C) 2005-2017 Leo Feyer
+ * Copyright (C) 2005-2018 Leo Feyer
  *
  * Formerly known as TYPOlight Open Source CMS.
  *
@@ -21,7 +21,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Cliff Parnitzky 2017-2017
+ * @copyright  Cliff Parnitzky 2017-2018
  * @author     Cliff Parnitzky
  * @package    MonitoringScanClient
  * @license    LGPL
@@ -63,21 +63,24 @@ $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_token'] = array
   'eval'                    => array('tl_class'=>'clr w50', 'doNotCopy'=>true, 'mandatory'=>true),
   'sql'                     => "varchar(255) NOT NULL default ''"
 );
-$GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_data'] = array
-(
-  'label'                   => &$GLOBALS['TL_LANG']['tl_monitoring']['client_data'],
-  'exclude'                 => true,
-  'inputType'               => 'textarea',
-  'eval'                    => array('readonly'=>true, 'tl_class'=>'clr'),
-  'load_callback'           => array(array('tl_monitoring_MonitoringScanClient', 'getClientData'))
-);
+if (\Config::get('monitoringDebugMode') === TRUE)
+{
+  $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_data'] = array
+  (
+    'label'                   => &$GLOBALS['TL_LANG']['tl_monitoring']['client_data'],
+    'exclude'                 => true,
+    'inputType'               => 'textarea',
+    'eval'                    => array('readonly'=>true, 'tl_class'=>'clr'),
+    'load_callback'           => array(array('tl_monitoring_MonitoringScanClient', 'getClientData'))
+  );
+}
 
 /**
  * Class tl_monitoring_MonitoringScanClient
  *
  * Provide miscellaneous methods that are used by the data configuration array.
  * PHP version 5
- * @copyright  Cliff Parnitzky 2017-2017
+ * @copyright  Cliff Parnitzky 2017-2018
  * @author     Cliff Parnitzky
  * @package    Controller
  */
