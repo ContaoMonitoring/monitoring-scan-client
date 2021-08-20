@@ -82,6 +82,29 @@ class MonitoringScanClient extends \Backend
     }
 
     $arrData = json_decode($response, true);
+    if($arrData['status'] == 401) {
+      $url = $clientUrl . "/system/modules/MonitoringClient/api/api.php?token=" . $token;
+
+      $agent = \Config::get('MONITORING_AGENT_NAME');
+      $headers = array(
+          'Content-Type: application/json',
+          'Connection: Close',
+      );
+      $curl = curl_init($url);
+
+      if ($curl)
+      {
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+        $response = curl_exec ($curl);
+        curl_close($curl);
+      }
+
+      $arrData = json_decode($response, true);
+    }
 
     if($response === FALSE || empty($arrData))
     {
