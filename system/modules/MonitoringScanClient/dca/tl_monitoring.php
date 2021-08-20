@@ -46,15 +46,6 @@ $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_scan_active'] = array
   'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true, 'doNotCopy'=>true),
   'sql'                     => "char(1) NOT NULL default ''"
 );
-$GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_url'] = array
-(
-  'label'                   => &$GLOBALS['TL_LANG']['tl_monitoring']['client_url'],
-  'exclude'                 => true,
-  'inputType'               => 'text',
-  'save_callback'           => array(array('tl_monitoring', 'prepareUrl')),
-  'eval'                    => array('tl_class'=>'clr long', 'mandatory'=>true, 'rgxp'=>'url', 'doNotCopy'=>true, 'maxlength'=>512, 'decodeEntities'=>true),
-  'sql'                     => "varchar(512) NOT NULL default ''"
-);
 $GLOBALS['TL_DCA']['tl_monitoring']['fields']['client_token'] = array
 (
   'label'                   => &$GLOBALS['TL_LANG']['tl_monitoring']['client_token'],
@@ -103,24 +94,116 @@ class tl_monitoring_MonitoringScanClient extends Backend
    */
   public function getClientData($varValue, DataContainer $dc)
   {
-    if (!$dc->activeRecord || empty($dc->activeRecord->client_url) || empty($dc->activeRecord->client_token))
+    if (!$dc->activeRecord || empty($dc->activeRecord->website) || empty($dc->activeRecord->client_token))
     {
       return "";
     }
     $monitoringScanClient = new \MonitoringScanClient();
-    $response = $monitoringScanClient->scanClient($dc->activeRecord->client_url, $dc->activeRecord->client_token);
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/server/contao', $dc->activeRecord->client_token);
+
     if (is_array($response))
     {
       foreach($response as $responseKey=>$responseValue)
       {
-        $varValue .= $responseKey . ": " . $responseValue . "\n";
+        $varValue .= 'contao.' . $responseKey . ": " . $responseValue . "\n";
       }
     }
     else
     {
       \Message::addError($response);
     }
-    
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/server/self-update' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'contao_manager.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/config/manager' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'contao_manager.config.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/server/config' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'server.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/server/php-web' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'php.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/server/composer' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'composer.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/config/composer' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'composer.config.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
+    $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/users' , $dc->activeRecord->client_token);
+    if (is_array($response))
+    {
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= 'users.' . $responseKey . ": " . $responseValue . "\n";
+      }
+    }
+    else
+    {
+      \Message::addError($response);
+    }
+
     return $varValue;
   }
 }
