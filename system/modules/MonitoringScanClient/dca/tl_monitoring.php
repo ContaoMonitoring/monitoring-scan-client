@@ -101,7 +101,7 @@ class tl_monitoring_MonitoringScanClient extends Backend
     $monitoringScanClient = new \MonitoringScanClient();
     $response = $monitoringScanClient->scanClient($dc->activeRecord->website, '/api/server/contao', $dc->activeRecord->client_token);
 
-    if( is_array($response) && !array_key_exist('monitoring.server.agent', $response) ) {
+    if( is_array($response) && !array_key_exists('monitoring.server.agent', $response) ) {
 
       foreach($response as $responseKey=>$responseValue)
       {
@@ -199,7 +199,7 @@ class tl_monitoring_MonitoringScanClient extends Backend
         \Message::addError($response);
       }
     }
-    elseif (is_array($response) && array_key_exist('monitoring.server.agent', $response))
+    elseif (is_array($response) && array_key_exists('monitoring.server.agent', $response))
     {
       foreach($response as $responseKey=>$responseValue)
       {
