@@ -201,11 +201,9 @@ class tl_monitoring_MonitoringScanClient extends Backend
     }
     elseif (is_array($response) && array_key_exist('monitoring.server.agent', $response))
     {
-
-        foreach($response as $responseKey=>$responseValue)
-        {
-          $varValue .= $responseKey . ": " . $responseValue . "\n";
-        }
+      foreach($response as $responseKey=>$responseValue)
+      {
+        $varValue .= $responseKey . ": " . $responseValue . "\n";
       }
     }
     else
