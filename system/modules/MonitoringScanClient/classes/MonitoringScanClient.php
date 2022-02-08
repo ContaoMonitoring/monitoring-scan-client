@@ -53,19 +53,20 @@ class MonitoringScanClient extends \Backend
   /**
    * Get the data from the client.
    */
-  public function scanClient($clientUrl, $token)
+  public function scanClient($clientUrl, $endpoint, $token)
   {
     if (!function_exists('curl_exec'))
     {
       return $GLOBALS['TL_LANG']['ERR']['monitoringScanClient']['CURL_NOT_INSTALLED'];
     }
-    
-    $url = $clientUrl . "?token=" . $token;
-    
+
+    $url = $clientUrl . "/contao-manager.phar.php" .  $endpoint;
+
     $agent = \Config::get('MONITORING_AGENT_NAME');
     $headers = array(
         'Content-Type: application/json',
-        'Connection: Close'
+        'Connection: Close',
+        'Authorization: Bearer ' .  $token,
     );
     $curl = curl_init($url);
 
@@ -79,9 +80,32 @@ class MonitoringScanClient extends \Backend
       $response = curl_exec ($curl);
       curl_close($curl);
     }
-    
+
     $arrData = json_decode($response, true);
-    
+    if($arrData['status'] == 401) {
+      $url = $clientUrl . "/system/modules/MonitoringClient/api/api.php?token=" . $token;
+
+      $agent = \Config::get('MONITORING_AGENT_NAME');
+      $headers = array(
+          'Content-Type: application/json',
+          'Connection: Close',
+      );
+      $curl = curl_init($url);
+
+      if ($curl)
+      {
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+        $response = curl_exec ($curl);
+        curl_close($curl);
+      }
+
+      $arrData = json_decode($response, true);
+    }
+
     if($response === FALSE || empty($arrData))
     {
         return sprintf($GLOBALS['TL_LANG']['ERR']['monitoringScanClient']['FAILED'], $url, $url);

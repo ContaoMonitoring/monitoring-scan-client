@@ -31,7 +31,6 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_monitoring']['client_scan_active'] = array('MonitoringClient Daten auslesen', 'Legen Sie fest, ob die internen Daten des überwachten Systems aus dem installierten MonitoringClient ausgelesen werden sollen.');
-$GLOBALS['TL_LANG']['tl_monitoring']['client_url']         = array('MonitoringClient API URL', 'Die Adresse zur API des MonitoringClient auf dem überwachten System. Eingabe <u>mit</u> Protokoll (z.B. http:// oder https://)!');
 $GLOBALS['TL_LANG']['tl_monitoring']['client_token']       = array('MonitoringClient Token', 'Das Token des MonitoringClient zur Authentifizierung der Datenabfrage.');
 $GLOBALS['TL_LANG']['tl_monitoring']['client_data']        = array('MonitoringClient Daten', 'Zeigt die internen Daten des überwachten Systems aus dem installierten MonitoringClient an.');
 
